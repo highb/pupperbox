@@ -1,7 +1,19 @@
 plan pupperbox::deploy(
   String[1] $host
 ) {
+  $puppet_installed = run_command('which puppet', $host)
+
+  unless $puppet_installed {
+    # The puppet-agent is required to do anything more interesting than executing shell scripts.
+    run_command('sudo rpm -Uvh https://yum.puppet.com/puppet5/puppet5-release-el-7.noarch.rpm && sudo yum -y install puppet-agent', $host)
+  }
+
+  # Facts must be gathered manually
+  run_plan(facts, nodes => $host)
+
   $username = 'brandon.high'
+
+  # Some packages I like to have
   $packages = [
     'tmux',
     'vim',
@@ -20,9 +32,12 @@ plan pupperbox::deploy(
     }
   }
 
-  # Tried using puppet module for managing oh-my-zsh here, but its all kinds of broken.
+  # Apply some Puppet module code
+  apply_prep($host)
   $apply_results = apply($host) {
-    include 'docker'
+    class { 'docker':
+      version => 'latest',
+    }
   }
 
   $apply_results.each | $result | {
