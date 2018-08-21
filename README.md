@@ -1,5 +1,5 @@
 
-# pupperbox
+# puppetbox
 
 Welcome to your new module. A short overview of the generated parts can be found in the PDK documentation at https://puppet.com/pdk/latest/pdk_generating_modules.html .
 
@@ -14,10 +14,10 @@ The README template below provides a starting point with details about what info
 #### Table of Contents
 
 1. [Description](#description)
-2. [Setup - The basics of getting started with pupperbox](#setup)
-    * [What pupperbox affects](#what-pupperbox-affects)
+2. [Setup - The basics of getting started with puppetbox](#setup)
+    * [What puppetbox affects](#what-puppetbox-affects)
     * [Setup requirements](#setup-requirements)
-    * [Beginning with pupperbox](#beginning-with-pupperbox)
+    * [Beginning with puppetbox](#beginning-with-puppetbox)
 3. [Usage - Configuration options and additional functionality](#usage)
 4. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
 5. [Limitations - OS compatibility, etc.](#limitations)
@@ -31,7 +31,7 @@ You can give more descriptive information in a second paragraph. This paragraph 
 
 ## Setup
 
-### What pupperbox affects **OPTIONAL**
+### What puppetbox affects **OPTIONAL**
 
 If it's obvious what your module touches, you can skip this section. For example, folks can probably figure out that your mysql_instance module affects their MySQL instances.
 
@@ -47,7 +47,7 @@ If your module requires anything extra before setting up (pluginsync enabled, an
 
 If your most recent release breaks compatibility or requires particular steps for upgrading, you might want to include an additional "Upgrading" section here.
 
-### Beginning with pupperbox
+### Beginning with puppetbox
 
 The very basic steps needed for a user to get the module up and running. This can include setup steps, if necessary, or it can be an example of the most basic use of the module.
 

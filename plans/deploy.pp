@@ -1,4 +1,4 @@
-plan pupperbox::deploy(
+plan puppetbox::deploy(
   String[1] $host
 ) {
   $puppet_installed = run_command('which puppet', $host)
