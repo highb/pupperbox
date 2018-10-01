@@ -34,15 +34,17 @@ plan pupperbox::deploy(
 
   # Apply some Puppet module code
   $apply_results = apply($nodes) {
-    # class { 'docker':
-    #   version => 'latest',
-    # }
+    class { 'docker':
+      version => 'latest',
+    }
+
     user { $username:
       ensure     => present,
-      groups     => ['wheel'],
+      groups     => ['wheel', 'docker'],
       managehome => true,
       home       => "/home/${username}",
       shell      => '/usr/bin/zsh',
+      require    => Class['docker'],
     }
 
     $_id_rsa_pub = file('pupperbox/id_rsa.pub', '/dev/null')
