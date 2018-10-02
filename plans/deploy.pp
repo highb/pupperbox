@@ -56,8 +56,7 @@ plan pupperbox::deploy(
   } else {
     $_packages = [
       'tmux',
-      'vim',
-      'zsh'
+      'vim'
     ]
   }
 
