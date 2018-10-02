@@ -31,6 +31,7 @@ plan pupperbox::deploy(
       'peteam-statusboard',
       'pe_acceptance_tests',
       'puppet',
+      'puppet-enterprise-marketplace-image',
       'puppetlabs-pe_accounts',
       'puppetlabs-pe_concat',
       'puppetlabs-pe_hocon',
@@ -83,7 +84,6 @@ plan pupperbox::deploy(
       groups     => ['wheel', 'docker'],
       managehome => true,
       home       => $_homedir,
-      shell      => '/usr/bin/zsh',
       require    => Class['docker'],
     }
 
@@ -99,9 +99,13 @@ plan pupperbox::deploy(
       }
     }
 
+    package { 'zsh':
+      ensure => 'latest'
+    }
+
     ohmyzsh::install { $username:
       set_sh  => true,
-      require => User[$username],
+      require => [User[$username], Package['zsh']],
     }
     -> ohmyzsh::plugins { $username: plugins => ['bundler', 'colorize', 'docker', 'git', 'github', 'ruby', 'rvm', 'vi-mode'] }
     -> ohmyzsh::theme { $username: theme => 'robbyrussell' }
