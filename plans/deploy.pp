@@ -118,6 +118,14 @@ plan pupperbox::deploy(
     # -> rbenv::plugin { 'rbenv/ruby-build': }
     # -> rbenv::build { '2.5.1': global => true }
 
+    # Some weird issues with the python module defaulting to ec2-user here...
+    # class { 'python':
+    #   versions          => ['3.6.6'],
+    #   user              => $username,
+    #   group             => $username,
+    #   pyenv_install_dir => "${_homedir}/.pyenv",
+    # }
+
     file { [$_srcdir]:
       ensure => directory,
       owner  => $username,
