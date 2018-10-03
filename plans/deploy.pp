@@ -4,10 +4,10 @@ plan pupperbox::deploy(
   String $ssh_domain = 'puppet.com',
   # Override the packages installed
   Array[String] $packages = [],
-  Optional[String] $github_user = undef,
+  String $github_user = '',
   # Will be used to checkout repos over HTTPS, which ends up storing the token in
   # plain text.
-  Optional[String] $github_token = undef
+  String $github_token = ''
 ) {
   # This should get the agent installed so we can do interesting things.
   $nodes.apply_prep
@@ -55,8 +55,6 @@ plan pupperbox::deploy(
     $_packages = $packages
   } else {
     $_packages = [
-      'zsh',
-      'tmux',
       'vim'
     ]
   }
@@ -75,6 +73,13 @@ plan pupperbox::deploy(
 
   # Apply some Puppet module code
   $apply_results = apply($nodes) {
+    package { [
+        'zsh',
+        'tmux'
+      ]:
+      ensure => 'present',
+    }
+
     class { 'docker':
       version => 'latest',
     }
@@ -84,7 +89,7 @@ plan pupperbox::deploy(
       groups     => ['wheel', 'docker'],
       managehome => true,
       home       => $_homedir,
-      # require    => Class['docker'],
+      require    => Class['docker'],
     }
 
     sudo::conf { 'wheel':
@@ -113,10 +118,9 @@ plan pupperbox::deploy(
 
 
     # The rbenv module needs to be updated to work with Puppet 5/6 :(
-    # class { 'rbenv':
-    #   install_dir => '/opt/rbenv'
-    #   latest      => true
-    # }
+    class { 'rbenv':
+      latest      => true
+    }
     # -> rbenv::plugin { 'rbenv/ruby-build': }
     # -> rbenv::build { '2.5.1': global => true }
 
@@ -137,7 +141,7 @@ plan pupperbox::deploy(
 
     $github_repos.each | $org, $repos | {
       $repos.each |$repo_name| {
-        if $github_user and $github_token {
+        if $github_user != '' and $github_token != '' {
           vcsrepo { "${_srcdir}/${org}/${repo_name}":
             ensure   => present,
             owner    => $username,
