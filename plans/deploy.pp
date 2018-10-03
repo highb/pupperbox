@@ -51,10 +51,11 @@ plan pupperbox::deploy(
   }
 
   # Some packages I like to have
-  if $packages {
+  if size($packages) > 0 {
     $_packages = $packages
   } else {
     $_packages = [
+      'zsh',
       'tmux',
       'vim'
     ]
@@ -83,7 +84,12 @@ plan pupperbox::deploy(
       groups     => ['wheel', 'docker'],
       managehome => true,
       home       => $_homedir,
-      require    => Class['docker'],
+      # require    => Class['docker'],
+    }
+
+    sudo::conf { 'wheel':
+      priority => 10,
+      content  => '%wheel ALL=(ALL) NOPASSWD: ALL',
     }
 
     $_id_rsa_pub = file('pupperbox/id_rsa.pub', '/dev/null')
@@ -98,13 +104,9 @@ plan pupperbox::deploy(
       }
     }
 
-    package { 'zsh':
-      ensure => 'latest'
-    }
-
     ohmyzsh::install { $username:
       set_sh  => true,
-      require => [User[$username], Package['zsh']],
+      require => [User[$username]],
     }
     -> ohmyzsh::plugins { $username: plugins => ['bundler', 'colorize', 'docker', 'git', 'github', 'ruby', 'rvm', 'vi-mode'] }
     -> ohmyzsh::theme { $username: theme => 'robbyrussell' }
@@ -136,7 +138,6 @@ plan pupperbox::deploy(
     $github_repos.each | $org, $repos | {
       $repos.each |$repo_name| {
         if $github_user and $github_token {
-          notice("Checking out ${org}/${repo_name}")
           vcsrepo { "${_srcdir}/${org}/${repo_name}":
             ensure   => present,
             owner    => $username,
