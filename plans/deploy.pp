@@ -116,11 +116,10 @@ plan pupperbox::deploy(
     -> ohmyzsh::plugins { $username: plugins => ['bundler', 'colorize', 'docker', 'git', 'github', 'ruby', 'rvm', 'vi-mode'] }
     -> ohmyzsh::theme { $username: theme => 'robbyrussell' }
 
-
     # The rbenv module needs to be updated to work with Puppet 5/6 :(
-    class { 'rbenv':
-      latest      => true
-    }
+    # class { 'rbenv':
+    #   latest      => true
+    # }
     # -> rbenv::plugin { 'rbenv/ruby-build': }
     # -> rbenv::build { '2.5.1': global => true }
 
